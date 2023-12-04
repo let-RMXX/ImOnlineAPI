@@ -32,7 +32,7 @@ class UserInfoController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:191',
             'email' => 'required|email|max:191',
-            'phone' => 'required|digits:10'
+            'phone' => 'required|digits:9'
         ]);
 
         if ($validator->fails()) {
@@ -59,6 +59,94 @@ class UserInfoController extends Controller
                     'message' => "Something Went Wrong"
                 ], 500);
             }
+        }
+    }
+
+    public function show($id)
+    {
+        $usersinfo = UserInfo::find($id);
+        if ($usersinfo) {
+            return response()->json([
+                'status' => 200,
+                'usersinfo' => $usersinfo
+            ], 200);
+        }else{
+            return response()->json([
+                'status' => 404,
+                'message' => "No User Found"
+            ], 404);
+        }
+    }
+
+    public function edit($id) 
+    {
+        $usersinfo = UserInfo::find($id);
+        if ($usersinfo) {
+            return response()->json([
+                'status' => 200,
+                'usersinfo' => $usersinfo
+            ], 200);
+        }else{
+            return response()->json([
+                'status' => 404,
+                'message' => "No User Found"
+            ], 404);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:191',
+            'email' => 'required|email|max:191',
+            'phone' => 'required|digits:9'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->messages()
+            ], 422);
+        } else {
+
+            $usersinfo = UserInfo::find($id);
+            if ($usersinfo) {
+                
+                $usersinfo->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone
+                ]);
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => "User updated Successfully"
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "No User Found"
+                ], 404);
+            }
+        }
+    }
+
+    public function destroy($id)
+    {
+        $usersinfo = UserInfo::find($id);
+        if ($usersinfo) {
+
+            $usersinfo->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => "User Deleted Successfully"
+            ], 200);
+
+        }else{
+            return response()->json([
+                'status' => 404,
+                'message' => "No User Found"
+            ], 404);
         }
     }
 }

@@ -21,3 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('usersinfo', [UserInfoController::class, 'index']);
 Route::post('usersinfo', [UserInfoController::class, 'store']);
+Route::get('usersinfo/{id}', [UserInfoController::class,'show']);
+Route::get('usersinfo/{id}/edit', [UserInfoController::class,'edit']);
+Route::put('usersinfo/{id}/update', [UserInfoController::class,'update']);
+Route::delete('usersinfo/{id}/delete', [UserInfoController::class,'destroy']);
